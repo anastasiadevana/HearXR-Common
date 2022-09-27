@@ -16,7 +16,7 @@ Use this option if you're expecting to make changes to the package in the proces
 
 Open shell in the root of your project repository, then run the following commands:
 ```
-git submodule add https://github.com/anastasiadevana/HearXR-Common.git <UNITY PROJECT ROOT>/Packages/com.hearxr.common
+git submodule add https://github.com/anastasiadevana/HearXR-Package-Common.git <UNITY PROJECT ROOT>/Packages/com.hearxr.common
 git submodule update
 git commit -m "Added Hear XR Common submodule"
 ```
