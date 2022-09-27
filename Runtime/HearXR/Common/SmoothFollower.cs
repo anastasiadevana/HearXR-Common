@@ -1,4 +1,16 @@
-﻿using System;
+//------------------------------------------------------------------------------
+// Smooth Follower
+//------------------------------------------------------------------------------
+//
+// Copyright (c) 2022 Anastasia Devana
+//
+// May be used for reference purposes only. Contact author for any intended
+// duplication or intended use beyond exploratory read, compilation, testing.
+// No license or rights transfer implied from the open publication. This
+// software is made available strictly on an "as is" basis without warranty of
+// any kind, express or implied.
+//------------------------------------------------------------------------------
+using System;
 using UnityEngine;
 
 namespace HearXR.Common
@@ -7,6 +19,7 @@ namespace HearXR.Common
     {
         #region Editor Fields
         [SerializeField] private Transform _objectToFollow;
+        [SerializeField] private bool _followMainCamera;
         
         [Header("Position")] 
         public bool followPosition = true;
@@ -50,6 +63,15 @@ namespace HearXR.Common
         {
             _hasObjectToFollow = (_objectToFollow != null);
         }
+
+        private void Start()
+        {
+            if (_followMainCamera)
+            {
+                _objectToFollow = Camera.main.transform;
+                _hasObjectToFollow = true;
+            } 
+        }
         #endregion
         
         #region Loop
@@ -73,7 +95,7 @@ namespace HearXR.Common
             {
                 _objectToFollow = null;
                 _hasObjectToFollow = false;
-                Console.WriteLine(e);
+                Debug.Log(e);
                 throw;
             }
         }

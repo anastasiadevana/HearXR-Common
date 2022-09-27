@@ -1,4 +1,16 @@
-﻿using UnityEngine;
+﻿//------------------------------------------------------------------------------
+// Custom editor min/max slider
+//------------------------------------------------------------------------------
+//
+// Copyright (c) 2022 Anastasia Devana
+//
+// May be used for reference purposes only. Contact author for any intended
+// duplication or intended use beyond exploratory read, compilation, testing.
+// No license or rights transfer implied from the open publication. This
+// software is made available strictly on an "as is" basis without warranty of
+// any kind, express or implied.
+//------------------------------------------------------------------------------
+using UnityEngine;
 
 namespace HearXR.Common
 {
