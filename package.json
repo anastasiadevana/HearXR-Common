@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:anastasiadevana/HearXR-Common.git",
+    "url": "git@github.com:anastasiadevana/HearXR-Package-Common.git",
     "directory": "com.hearxr.common"
   },
   "publishConfig": {
