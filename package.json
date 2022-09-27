@@ -1,0 +1,26 @@
+{
+  "name": "com.hearxr.common",
+  "displayName": "Hear XR Common",
+  "version": "1.0.0",
+  "unity": "2020.3",
+  "description": "Common Hear XR scripts and dev tools",
+  "keywords": [
+    "tools"
+  ],
+  "category": "Hear XR",
+  "type": "tool",
+  "author": {
+    "name": "Hear XR",
+    "email": "anastasia@hearxr.com",
+    "url": "https://hearxr.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:anastasiadevana/HearXR-Common.git",
+    "directory": "com.hearxr.common"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@anastasiadevana"
+  },
+  "hideInEditor": false
+}
