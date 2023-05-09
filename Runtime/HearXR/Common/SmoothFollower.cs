@@ -20,17 +20,17 @@ namespace HearXR.Common
         #region Editor Fields
         [SerializeField] private Transform _objectToFollow;
         [SerializeField] private bool _followMainCamera;
+        [SerializeField] private bool _lateUpdate;
         
         [Header("Position")] 
         public bool followPosition = true;
         public bool smoothFollowPosition;
-        [Tooltip("Lower numbers are slower")] 
-        public float smoothPositionFollowSpeed = 0.2f;
-        
+        public float smoothPositionFollowSpeed = 5.0f;
+        public bool progressivePositionFollow;
+
         [Header("Rotation")] public bool followRotation = true;
         public bool smoothFollowRotation;
-        [Tooltip("Lower numbers are slower")]
-        public float smoothRotationFollowSpeed = 0.2f;
+        public float smoothRotationFollowSpeed = 1.0f;
         #endregion
         
         #region Properties
@@ -77,13 +77,23 @@ namespace HearXR.Common
         #region Loop
         private void Update()
         {
-            if (!_follow || !_hasObjectToFollow) return;
+            if (!_lateUpdate)
+            {
+                DoUpdate();
+            }
+        }
 
-            // TODO: Test what kind of exception will crop up, so we can just handle that one.
-            // if (_hasObjectToFollow)
-            // {
-            //     Destroy(_objectToFollow.gameObject);
-            // }
+        private void LateUpdate()
+        {
+            if (_lateUpdate)
+            {
+                DoUpdate();
+            }
+        }
+
+        private void DoUpdate()
+        {
+            if (!_follow || !_hasObjectToFollow) return;
             
             // Since the target object can get destroyed when we least expect it, basically just always expect it.
             try
@@ -91,12 +101,13 @@ namespace HearXR.Common
                 if (followPosition) FollowObjectPosition();
                 if (followRotation) FollowObjectRotation();
             }
-            catch (Exception e)
+            catch (MissingReferenceException e)
             {
                 _objectToFollow = null;
                 _hasObjectToFollow = false;
-                Debug.Log(e);
-                throw;
+                //Debug.Log(e);
+                //throw;
+                // Fail quietly
             }
         }
         #endregion
@@ -104,18 +115,46 @@ namespace HearXR.Common
         #region Private Methods
         private void FollowObjectPosition()
         {
-            Vector3 targetPosition = _objectToFollow.position;
-            transform.position = (smoothFollowPosition)
-                ? Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * smoothPositionFollowSpeed)
-                : targetPosition;
+            try
+            {
+                var targetPosition = _objectToFollow.position;
+                var currentPosition = transform.position;
+                
+                if (!smoothFollowPosition)
+                {
+                    transform.position = targetPosition;
+                    return;
+                }
+
+                var followSpeed = smoothPositionFollowSpeed;
+                if (progressivePositionFollow)
+                {
+                    followSpeed *= (targetPosition - currentPosition).sqrMagnitude;
+                }
+                
+                transform.position = Vector3.Lerp(currentPosition, targetPosition, Time.deltaTime * followSpeed);
+            }
+            catch (Exception e)
+            {
+                _objectToFollow = null;
+                _hasObjectToFollow = false;
+            }
         }
 
         private void FollowObjectRotation()
         {
-            Quaternion targetRotation = _objectToFollow.rotation;
-            transform.rotation = (smoothFollowRotation)
-                ? Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * smoothRotationFollowSpeed)
-                : targetRotation;
+            try
+            {
+                var targetRotation = _objectToFollow.rotation;
+                transform.rotation = (smoothFollowRotation)
+                    ? Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * smoothRotationFollowSpeed)
+                    : targetRotation;
+            }
+            catch (Exception e)
+            {
+                _objectToFollow = null;
+                _hasObjectToFollow = false;
+            }
         }
         #endregion
     }   
