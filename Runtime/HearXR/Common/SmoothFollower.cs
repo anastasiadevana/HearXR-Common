@@ -68,8 +68,15 @@ namespace HearXR.Common
         {
             if (_followMainCamera)
             {
-                _objectToFollow = Camera.main.transform;
-                _hasObjectToFollow = true;
+                try
+                {
+                    _objectToFollow = Camera.main.transform;
+                    _hasObjectToFollow = true;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"SmoothFollower on {gameObject.name} is unable to follow the camera.");
+                }
             } 
         }
         #endregion
