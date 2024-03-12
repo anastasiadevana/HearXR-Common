@@ -31,6 +31,7 @@ namespace HearXR.Common
         [Header("Rotation")] public bool followRotation = true;
         public bool smoothFollowRotation;
         public float smoothRotationFollowSpeed = 1.0f;
+        public bool gravityAligned;
         #endregion
         
         #region Properties
@@ -153,6 +154,12 @@ namespace HearXR.Common
             try
             {
                 var targetRotation = _objectToFollow.rotation;
+                
+                if (gravityAligned)
+                {
+                    targetRotation = Quaternion.Euler(0.0f, targetRotation.eulerAngles.y, 0.0f);
+                }
+
                 transform.rotation = (smoothFollowRotation)
                     ? Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * smoothRotationFollowSpeed)
                     : targetRotation;
